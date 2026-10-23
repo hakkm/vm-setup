@@ -60,7 +60,7 @@ main() {
   case "$manager" in
     apt)
       $privilege apt-get update
-      pkg_install zsh git curl ca-certificates tar gzip unzip vim python3 python3-venv nodejs ripgrep fd-find fzf bat less man-db util-linux passwd
+      pkg_install zsh git curl ca-certificates tar gzip unzip vim python3 python3-venv nodejs ripgrep fd-find fzf ranger bat less man-db util-linux passwd
       # NodeSource's nodejs package already includes npm and conflicts with apt's npm.
       if ! command -v npm >/dev/null 2>&1; then
         pkg_install npm
@@ -70,19 +70,19 @@ main() {
         pkg_install zoxide
       fi ;;
     dnf)
-      pkg_install zsh git ca-certificates tar gzip unzip vim python3 nodejs npm ripgrep fd-find fzf bat zoxide less man-db util-linux
+      pkg_install zsh git ca-certificates tar gzip unzip vim python3 nodejs npm ripgrep fd-find fzf ranger bat zoxide less man-db util-linux
       # Fedora images often already provide curl-minimal, which conflicts with curl.
       if ! command -v curl >/dev/null 2>&1; then pkg_install curl; fi
       if ! command -v chsh >/dev/null 2>&1; then pkg_install util-linux-user; fi ;;
     pacman)
       # A full upgrade avoids an unsupported Arch partial upgrade.
       $privilege pacman -Syu --noconfirm
-      pkg_install zsh git curl ca-certificates tar gzip unzip vim python nodejs npm ripgrep fd fzf bat zoxide less man-db util-linux ;;
+      pkg_install zsh git curl ca-certificates tar gzip unzip vim python nodejs npm ripgrep fd fzf ranger bat zoxide less man-db util-linux ;;
     zypper)
       $privilege zypper --non-interactive refresh
-      pkg_install zsh git curl ca-certificates tar gzip unzip vim python3 nodejs npm ripgrep fd fzf bat zoxide less man util-linux shadow findutils ;;
+      pkg_install zsh git curl ca-certificates tar gzip unzip vim python3 nodejs npm ripgrep fd fzf ranger bat zoxide less man util-linux shadow findutils ;;
     apk)
-      pkg_install zsh git curl ca-certificates tar gzip unzip vim python3 py3-pip nodejs npm ripgrep fd fzf bat zoxide less mandoc util-linux shadow neovim ;;
+      pkg_install zsh git curl ca-certificates tar gzip unzip vim python3 py3-pip nodejs npm ripgrep fd fzf ranger bat zoxide less mandoc util-linux shadow neovim ;;
   esac
   work=$(mktemp -d)
   trap 'rm -rf "$work"' EXIT

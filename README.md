@@ -27,7 +27,7 @@ Install `curl` first if your minimal image does not include it.
   (for example on Ubuntu 20.04's older glibc), Neovim is skipped, the existing
   editor config is left alone, and `vim` becomes `$EDITOR`. Alpine uses its native
   package and must provide Neovim 0.12 or newer.
-- Git, Vim, Python, Node.js/npm, ripgrep, fd, fzf, bat, zoxide,
+- Git, Vim, Python, Node.js/npm, ripgrep, fd, fzf, ranger, bat, zoxide,
   man pages, and less. Debian's `batcat` and `fdfind` receive portable aliases.
   When an older Ubuntu release has no zoxide package, the installer uses a pinned,
   SHA-256-verified upstream musl binary. Existing npm installations (including

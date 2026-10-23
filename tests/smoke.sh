@@ -28,6 +28,7 @@ else
   test "$(cat "$HOME/.config/nvim/init.lua")" = 'original init'
   test ! -e "$HOME/.local/bin/nvim"
 fi
+command -v ranger >/dev/null
 export VM_EXPECTED_EDITOR="$expected_editor"
 test ! -e "$HOME/.config/zsh/secrets.zsh"
 backup=$(find "$HOME/.local/state" -path '*/zsh/secrets.zsh' | head -1)
@@ -58,5 +59,5 @@ test ! -e "${XDG_STATE_HOME:-$HOME/.local/state}/vm-setup"
 # Packages present before install stay; packages it added go.
 hash -r
 command -v tar >/dev/null
-if command -v zsh >/dev/null; then exit 1; fi
+for tool in zsh ranger; do if command -v "$tool" >/dev/null; then exit 1; fi; done
 printf '\nSmoke test passed (no source builds, clean uninstall).\n'
