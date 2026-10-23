@@ -1,6 +1,6 @@
 alias x='chmod +x'
-alias nv=nvim
-alias vi=nvim
+alias nv='$EDITOR'
+alias vi='$EDITOR'
 alias ls='ls --color=auto'
 alias ll='ls -lh'
 alias lll='ls -lah'
@@ -11,12 +11,12 @@ alias df='df -h'
 alias free='free -m'
 alias psmem='ps auxf | sort -nr -k 4 | head -5'
 alias pscpu='ps auxf | sort -nr -k 3 | head -5'
-alias aliasrc='nvim "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/aliases.zsh"'
+alias aliasrc='$EDITOR "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/aliases.zsh"'
 alias alrc=aliasrc
 alias al=aliasrc
-alias exrc='nvim "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/exports.zsh"'
-alias nvrc='nvim "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.lua"'
-alias zshrc='nvim "${XDG_CONFIG_HOME:-$HOME/.config}/zsh"'
+alias exrc='$EDITOR "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/exports.zsh"'
+alias nvrc='$EDITOR "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.lua"'
+alias zshrc='$EDITOR "${XDG_CONFIG_HOME:-$HOME/.config}/zsh"'
 if command -v bat >/dev/null; then
   alias cat='bat -n --pager less'
 elif command -v batcat >/dev/null; then

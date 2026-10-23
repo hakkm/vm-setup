@@ -95,83 +95,17 @@ local mappings = {
   },
   ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
   ["<leader>f"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
-  ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
-  ["M"] = { "<cmd>MarkdownPreview<cr>", "Markdown preview" },
-  ["R"] = { "<cmd>w <CR>:RunFile toggleterm<CR>", "Runner" },
-  ["rrr"] = { "<cmd>w <CR>:RunFile toggleterm<CR>", "Run file" },
-  ["rmd"] = { "<cmd>w <CR>:make<CR>", "make" },
-  ["rmf"] = { "<cmd>make file='%:t:r'<CR>", "make current file" },
-  ["rrf"] = { "<cmd>make run file='%:t:r'<CR>", "make current file" },
-  ["red"] = { "<cmd>w <CR>:make run<CR>", "Execute (make run)" },
-
-  -- icon picker
-  -- ["i"] = { "<cmd>IconPickerInsert<cr>", "Icon Picker" },
-  -- ["y"] = { "<cmd>IconPickerYank<cr>", "Icon Picker Yank" },
-
-  r = {
-    name = "Run",
-    r = { "<cmd>w <CR>:RunFile toggleterm<CR>", "Run file with code runner" },
-    m = {
-      name = "Make",
-      d = { "<cmd>w <CR>:make<CR>", "make" },
-      f = { "<cmd>make file='%:t:r'<CR>", "make current file" },
-    },
-    e = {
-      name = "Execute (make run)",
-      d = { "<cmd>w <CR>:make run<CR>", "Execute (make run)" },
-      f = { "<cmd>make run file='%:t:r'<CR>", "make current file" },
-    }
-    -- f = {
-    --   name = "File",
-    --   r = { "<cmd>make run file='%:t:r'<CR>", "make current file" },
-    --   m = { "<cmd>make file='%:t:r'<CR>", "make current file" },
-    -- },
-    -- d = {
-    --   name = "Directory",
-    --   r = { "<cmd>make run dir='%:p:h'<CR>", "make current directory" },
-    --   m = { "<cmd>make dir='%:p:h'<CR>", "make current directory" },
-    -- },
-  },
-
-  u = {
-    c = { "<cmd>Telescope colorscheme<cr>", "ColorScheme" },
-    i = { "<cmd>Nerdy<cr>", "Insert Icon" },
-    z = { "<cmd>lua require('zen-mode').toggle()<cr>", "Zen Mode" },
-    -- no relative numbers
-    n = { "<cmd>setlocal norelativenumber!<cr>", "No Relative Numbers" },
-    t = {
-      name = "TailwindCss",
-      s = { "<cmd>TailwindSort<cr>", "Sort Class" },
-    },
-  },
 
   c = {
-    name = "Codi",
-    a = { "<cmd>Codi<cr>", "Activate Codi" },
-    d = { "<cmd>Codi!<cr>", "Deactivate Codi" },
-    n = { "<cmd>CodiNew<cr>", "New Codi" },
-    s = { "<cmd>CodiSelect<cr>", "Select Codi" },
-    e = { "<cmd>CodiExpand<cr>", "Expand Codi" },
-  },
-
-  h = {
-    name = "Harpoon/high",
-    n = { "<cmd>nohlsearch<cr>", "No Highlight" },
-    h = { "<cmd>Telescope harpoon marks<cr>", "Harpoon" },
-    a = { "<cmd>lua require('harpoon.mark').add_file()<cr>", "Add File" },
-  },
-
-  p = {
-    name = "Plugin",
-    a = { "<cmd>AddNewPlugin<cr>", "Add Plugin" },
-    f = { "<cmd>AddNewPluginInFile<cr>", "Add Plugin + Require" },
-    r = { "<cmd>RequirePlugin<cr>", "Require Plugin" },
+    name = "Copilot",
+    d = { "<cmd>Copilot disable<cr>", "Disable" },
+    e = { "<cmd>Copilot enable<cr>", "Enable" },
+    s = { "<cmd>Copilot status<cr>", "Status" },
+    p = { "<cmd>Copilot panel<cr>", "Panel" },
   },
 
   g = {
     name = "Git",
-    f = { ":Git<CR>", "Fugitive" },
-    g = { "<cmd>lua lazygit_toggle()<CR>", "Lazygit" }, -- see toggle_term
     j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
     k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
     l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
@@ -192,124 +126,15 @@ local mappings = {
     },
   },
 
-  l = {
-    name = "LSP",
-    c = {
-      name = "Copilot",
-      d = { "<cmd>Copilot disable<cr>", "Disable copilot" },
-      e = { "<cmd>Copilot enable<cr>", "Enable copilot" },
-      s = { "<cmd>Copilot status<cr>", "Status copilot" },
-      p = { "<cmd>Copilot panel<cr>", "panel copilot" },
-    },
-    F = {
-      name = "Folders",
-      a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", "Workspace [A]dd Folder" },
-      r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", "Workspace [R]emove Folder" },
-    },
-    d = {
-      name = "Document",
-      d = {
-        "<cmd>Trouble diagnostics<cr>",
-        "Document Diagnostics",
-      },
-      f = { "<cmd>Telescope lsp_document_symbols<cr>", "[F]zf Symbols" },
-      s = { "<cmd>SymbolsOutline<cr>", "[S]ymbols Outline" },
-    },
-    a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-    -- w = {
-    --   "<cmd>TroubleToggle workspace_diagnostics<cr>",
-    --   "Workspace Diagnostics",
-    -- },
-    -- f = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", "Format" },
-    i = { "<cmd>LspInfo<cr>", "Info" },
-    I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
-    j = {
-      "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-      "Next Diagnostic",
-    },
-    k = {
-      "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
-      "Prev Diagnostic",
-    },
-    l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
-    -- q = { "<cmd>TroubleToggle quickfix<cr>", "Quickfix" },
-    q = {
-      "<cmd>Trouble diagnostics<cr>",
-      "Document Diagnostics",
-    },
-    r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-    s = { "<cmd>LspStart<cr>", "Start LSP" },
-    S = {
-      "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-      "Workspace Symbols",
-    },
-    t = { "<cmd>LspToggle<cr>", "Toggle LSP" },
-    x = { "<cmd>LspStop<cr>", "Stop LSP" },
-  },
   s = {
-    name = "Search/Sessions",
+    name = "Search",
     c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-    e = { "<cmd>lua require('luasnip.loaders').edit_snippet_files()<cr>", "Edit Snippets" },
     h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
     M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
     o = { "<cmd>Telescope oldfiles<cr>", "Open Recent/Old Files" }, -- old just for speed of thought
     R = { "<cmd>Telescope registers<cr>", "Registers" },
     k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
     C = { "<cmd>Telescope commands<cr>", "Commands" },
-    s = { ":SessionSave<CR>", "Save Session" },
-    r = { ":SessionRestore<CR>", "Restore Session" },
-    l = { ":lua require('auto - session.session - lens ').search_session()<CR>", "List Sessions" },
-  },
-
-  T = {
-    name = "Terminal",
-    n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
-    u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
-    t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
-    p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
-    f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
-    h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
-    v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
-  },
-  x = {
-    name = "Latex",
-    r = { ":w <CR>:VimtexCompile<CR>", "Run / Compile" },
-    c = { ":VimtexClean<CR>", "Clean" },
-    v = { ":VimtexView<CR>", "View" },
-  },
-  d = {
-    name = "DAP",
-    c = { ":DapContinue<CR>", "Continue" },
-    b = { ":DapToggleBreakpoint<CR>", "Toggle Breakpoint" },
-    r = { ":lua require('dapui').open({reset = true})<CR>", "Reset DAP UI view" },
-    i = { ":DapStepIn<CR>", "Step In" },
-    o = { ":DapStepOut<CR>", "Step Out" },
-    s = { ":lua require'dap.ui.variables'.scopes()<CR>", "Scopes" },
-    v = { ":lua require'dap.ui.variables'.visual_hover()<CR>", "Visual Hover" },
-    e = { ":lua require'dap.ui.expressions'.eval()<CR>", "Eval" },
-    h = { ":lua require'dap.ui.widgets'.hover()<CR>", "Hover" },
-    t = { ":DapTerminate<CR>", "Terminate" },
-  },
-  o = {
-    name = "Obsidian",
-    d = { ":ObsidianToday<CR>", "Today" },
-    n = { ":ObsidianNew<CR>", "New Note" },
-  },
-  L = {
-    name = "Laravel",
-    a = { ":Laravel artisan<CR>", "Artisan" },
-    r = { ":Laravel routes<CR>", "Routes" },
-    m = { ":Laravel related<CR>", "Related" },
-  },
-  t = {
-    name = "Testing",
-    f = { ':lua require("neotest").run.run(vim.fn.expand("%"))<CR>', "Run File" },
-    o = { ":Neotest output<CR>", "Output" },
-    s = { ":Neotest summary<CR>", "Summary" },
-  },
-  v = {
-    name = "View",
-    m = { "<cmd>MarkdownPreviewToggle<cr>", "Markdown Preview" },
   },
 }
 

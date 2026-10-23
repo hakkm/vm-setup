@@ -6,7 +6,7 @@ bindkey '^ ' autosuggest-accept
 autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey '^e' edit-command-line
-bindkey -s '^v' 'nvim\n'
+bindkey -s '^v' "${EDITOR}\n"
 bindkey -s '^r' 'fh\n'
 command -v zoxide >/dev/null && bindkey -s '^f' 'zi\n'
 true

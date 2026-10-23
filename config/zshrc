@@ -9,5 +9,7 @@ for _vm_file in completion commands vim-mode aliases keymaps timer; do
   source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/${_vm_file}.zsh"
 done
 unset _vm_file
+# zap-prompt shows only the directory; prefix user@host so VMs are distinguishable.
+PROMPT="%B%F{green}%n@%m%f%b $PROMPT"
 # Syntax highlighting should load after widgets and keybindings.
 plug "zsh-users/zsh-syntax-highlighting"

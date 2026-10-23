@@ -1,9 +1,15 @@
-export EDITOR=nvim
-export VISUAL=nvim
-export MANPAGER='nvim +Man!'
 export PAGER=less
 typeset -U path PATH
 path=("$HOME/.local/bin" $path)
+
+if command -v nvim >/dev/null; then
+  export EDITOR=nvim
+  export MANPAGER='nvim +Man!'
+else
+  export EDITOR=vim
+  export MANPAGER=less
+fi
+export VISUAL="$EDITOR"
 
 mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/zsh"
 HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"

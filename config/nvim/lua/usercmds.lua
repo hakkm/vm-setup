@@ -18,7 +18,7 @@
 -- )
 
 -- check if not nill then close if nil error
-local notify = require "notify"
+local notify = vim.notify
 
 local function create_source_header_pair()
   -- downside of vim.ui.input (async) if you escape it will not work until reopening nvim

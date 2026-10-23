@@ -14,18 +14,20 @@ Install `curl` first if your minimal image does not include it.
 ## What gets installed
 
 - Zsh with Zap, supercharge, zap-prompt, autosuggestions, syntax highlighting,
-  and completions.
+  and completions. The prompt starts with `user@host` so each VM is recognizable.
 - Your Vi mode (`kj` to leave insert mode), cursor shapes, timer, history search,
-  Ctrl-E command editing, Ctrl-R fuzzy history, and Ctrl-V Neovim shortcut.
+  Ctrl-E command editing, Ctrl-R fuzzy history, and Ctrl-V editor shortcut.
 - Portable aliases, `mkcd`, `fcd`, `cdf`, `cdpr`, `sf`, and zoxide navigation.
   Package aliases follow the VM's package manager.
-- Neovim **v0.12.6**, with your Lua config, plugins, keymaps, snippets, themes,
-  and `lazy-lock.json`. Official Linux tarballs are SHA-256 verified and installed
-  under `~/.local/share/vm-setup`. On older Debian/Ubuntu systems whose glibc cannot
-  run the binary, the same release is built locally from a pinned source commit
-  (allow several extra minutes on the first install). Alpine uses its native package
-  and must provide Neovim 0.12 or newer.
-- Git, C/C++ build tools, Python, Node.js/npm, ripgrep, fd, fzf, bat, zoxide,
+- Neovim **v0.12.6** with a lean editing config: Copilot, autopairs, surround,
+  Telescope, nvim-tree, lualine, which-key, gitsigns, and the VS Code theme, pinned
+  in `lazy-lock.json`. Official Linux tarballs are SHA-256 verified and installed
+  under `~/.local/share/vm-setup`. Nothing is ever compiled: plugin build hooks,
+  Luarocks, and Mason auto-installs are disabled. If the official binary cannot run
+  (for example on Ubuntu 20.04's older glibc), Neovim is skipped, the existing
+  editor config is left alone, and `vim` becomes `$EDITOR`. Alpine uses its native
+  package and must provide Neovim 0.12 or newer.
+- Git, Vim, Python, Node.js/npm, ripgrep, fd, fzf, bat, zoxide,
   man pages, and less. Debian's `batcat` and `fdfind` receive portable aliases.
   When an older Ubuntu release has no zoxide package, the installer uses a pinned,
   SHA-256-verified upstream musl binary. Existing npm installations (including
@@ -55,18 +57,9 @@ The VM export allowlist is `EDITOR`, `VISUAL`, `MANPAGER`, `PAGER`, and a portab
 local SDKs, hardcoded home paths, language version managers, and service exports
 are left out. `dotbare` is omitted because it manages private dotfiles.
 
-Neovim is a copy of the existing config, with snippets resolved relative to its
-config directory and the Python debugger path pointing to Mason's debugpy
-installation. Hop uses the public `smoka7/hop.nvim` fork at the same locked commit;
-the original repository is unavailable. Blade's unused SSH submodule is disabled.
-The Markdown preview build restores its generated lockfile so reruns stay clean;
-folding skips unnamed buffers, and the statusline uses the current option format.
-The installer restores plugins before loading the full editor configuration.
-Copilot requires your own login (`:Copilot setup`). Language
-servers are managed by Mason; external formatters, runtimes, debuggers, LaTeX/PDF
-tools, and lazygit still need their corresponding packages when you use them.
-Treesitter parsers are installed as needed with `:TSInstall`; automatic parser
-installation stays disabled, as in the original configuration.
+Neovim is a trimmed copy of the existing config: language servers, completion,
+debugging, Treesitter, and language-specific plugins are left out. Copilot requires
+your own login (`:Copilot setup`). Comment toggling uses Neovim's built-in `gc`.
 Nerd Font icons require a font on your **local terminal**, not on the VM.
 
 ## Backups and reruns
@@ -84,6 +77,21 @@ repository snapshot again; local config edits are preserved in the new backup.
 Existing Neovim data/state are retained. Restore a config by moving its current
 path aside and moving the corresponding backup path back to its original location.
 System packages and plugin data are not removed by restoring configuration.
+
+## Uninstall
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/hakkm/vm-setup/main/uninstall.sh | sh
+```
+
+The installer records what it adds in `~/.local/state/vm-setup/install-record`:
+packages that were missing beforehand, files it created, files it replaced, and
+your previous login shell. `uninstall.sh` lists the planned changes, asks for
+confirmation (`--yes` skips it), then removes only those packages and files,
+moves the original files back, and resets the login shell. Packages and files that
+were already on the VM are kept. `--keep-packages` leaves all packages installed.
+Arch's `pacman -Syu` system upgrade cannot be undone. Backup directories stay in
+place for you to delete after checking.
 
 `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, and `XDG_STATE_HOME` are respected; `.zshrc`
 is installed in `$HOME`. Custom `ZDOTDIR` configurations need to source that file.
@@ -106,8 +114,7 @@ python3 scripts/check-public.py
 docker run --rm -v "$PWD:/setup:ro" ubuntu:24.04 sh /setup/tests/smoke.sh
 ```
 
-Plugin installation needs internet access to GitHub, GitLab, npm, and Mason's
-package sources. `--no-sync` still installs Zap plugins, but defers Neovim plugins.
+Plugin installation needs internet access to GitHub. `--no-sync` still installs Zap plugins, but defers Neovim plugins.
 The downloaded Neovim release and Zap revision are pinned in `install.sh`;
 Neovim plugin revisions are recorded in `config/nvim/lazy-lock.json`.
 

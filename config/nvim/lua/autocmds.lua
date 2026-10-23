@@ -39,16 +39,6 @@ vim.cmd [[
     autocmd TermOpen * setlocal norelativenumber
   augroup end
 
-  augroup _lsp
-    autocmd!
-    autocmd BufWritePre *.lua,*.php,*.py lua vim.lsp.buf.format()
-  augroup end
-
-  augroup _lazygit
-    autocmd!
-    autocmd BufEnter * :lua require('lazygit.utils').project_root_dir()
-  augroup end
-
 " use this command to disable folding =:set nofoldenable=
   augroup Folding
     autocmd!
