@@ -31,10 +31,10 @@ main() {
   if [ "$(id -u)" -ne 0 ]; then
     command -v sudo >/dev/null 2>&1 || die 'sudo or root is required to install packages.'
     privilege=sudo
-    if ! sudo -n -v 2>/dev/null; then
+    if ! sudo -n true 2>/dev/null; then
       # Read sudo's prompt from the terminal when the script itself arrives on stdin.
       # shellcheck disable=SC2024
-      sudo -v </dev/tty
+      sudo true </dev/tty
     fi
   fi
   # Select from the distro identity, not whichever package manager happens to be on PATH.
