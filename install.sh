@@ -64,7 +64,7 @@ main() {
       $privilege pacman -Syu --needed --noconfirm zsh git curl ca-certificates tar gzip unzip base-devel python nodejs npm ripgrep fd fzf bat zoxide less man-db util-linux ;;
     zypper)
       $privilege zypper --non-interactive refresh
-      $privilege zypper --non-interactive install zsh git curl ca-certificates tar gzip unzip gcc gcc-c++ make python3 nodejs npm ripgrep fd fzf bat zoxide less man-db util-linux shadow ;;
+      $privilege zypper --non-interactive install zsh git curl ca-certificates tar gzip unzip gcc gcc-c++ make python3 nodejs npm ripgrep fd fzf bat zoxide less man util-linux shadow ;;
     apk)
       $privilege apk add zsh git curl ca-certificates tar gzip unzip build-base python3 py3-pip nodejs npm ripgrep fd fzf bat zoxide less mandoc util-linux shadow neovim ;;
   esac
