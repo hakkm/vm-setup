@@ -21,10 +21,15 @@ Install `curl` first if your minimal image does not include it.
   Package aliases follow the VM's package manager.
 - Neovim **v0.12.6**, with your Lua config, plugins, keymaps, snippets, themes,
   and `lazy-lock.json`. Official Linux tarballs are SHA-256 verified and installed
-  under `~/.local/share/vm-setup`; Alpine uses its native musl-compatible package
+  under `~/.local/share/vm-setup`. On older Debian/Ubuntu systems whose glibc cannot
+  run the binary, the same release is built locally from a pinned source commit
+  (allow several extra minutes on the first install). Alpine uses its native package
   and must provide Neovim 0.12 or newer.
 - Git, C/C++ build tools, Python, Node.js/npm, ripgrep, fd, fzf, bat, zoxide,
   man pages, and less. Debian's `batcat` and `fdfind` receive portable aliases.
+  When an older Ubuntu release has no zoxide package, the installer uses a pinned,
+  SHA-256-verified upstream musl binary. Existing npm installations (including
+  NodeSource's bundled npm) are reused.
 
 Targets: Debian/Ubuntu, Fedora, Arch, openSUSE, and Alpine. Other distributions
 in those families are detected through `/etc/os-release`. The official Neovim

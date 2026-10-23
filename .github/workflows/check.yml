@@ -16,8 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ['ubuntu:24.04', 'debian:trixie', 'fedora:44', 'archlinux:latest', 'opensuse/tumbleweed:latest', 'alpine:latest']
+        image: ['ubuntu:20.04', 'ubuntu:24.04', 'debian:trixie', 'fedora:44', 'archlinux:latest', 'opensuse/tumbleweed:latest', 'alpine:latest']
     steps:
       - uses: actions/checkout@v7
       - name: Install, check editor and shell, rerun and verify backups
         run: docker run --rm -v "$PWD:/setup:ro" '${{ matrix.image }}' sh /setup/tests/smoke.sh
+  focal-arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify Ubuntu 20.04 fallback on native ARM64
+        run: docker run --rm -v "$PWD:/setup:ro" ubuntu:20.04 sh /setup/tests/smoke.sh

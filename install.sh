@@ -53,7 +53,15 @@ main() {
   case "$manager" in
     apt)
       $privilege apt-get update
-      $privilege env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y zsh git curl ca-certificates tar gzip unzip build-essential python3 python3-venv nodejs npm ripgrep fd-find fzf bat zoxide less man-db util-linux passwd ;;
+      $privilege env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y zsh git curl ca-certificates tar gzip unzip build-essential python3 python3-venv nodejs ripgrep fd-find fzf bat less man-db util-linux passwd
+      # NodeSource's nodejs package already includes npm and conflicts with apt's npm.
+      if ! command -v npm >/dev/null 2>&1; then
+        $privilege env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y npm
+      fi
+      # Ubuntu 20.04 has no zoxide package; install a verified upstream binary below.
+      if apt-cache show zoxide >/dev/null 2>&1; then
+        $privilege env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y zoxide
+      fi ;;
     dnf)
       $privilege dnf install --setopt=install_weak_deps=False -y zsh git ca-certificates tar gzip unzip gcc gcc-c++ make python3 nodejs npm ripgrep fd-find fzf bat zoxide less man-db util-linux
       # Fedora images often already provide curl-minimal, which conflicts with curl.
@@ -84,21 +92,52 @@ main() {
   data_home=${XDG_DATA_HOME:-$HOME/.local/share}
   state_home=${XDG_STATE_HOME:-$HOME/.local/state}
   mkdir -p "$HOME/.local/bin" "$config_home" "$data_home" "$state_home"
+  if ! command -v zoxide >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/zoxide" ]; then
+    case "$(uname -m)" in
+      x86_64) zoxide_arch=x86_64; zoxide_digest=2d93385b99f3e82cf2701609a1bffcad863fbeb75aa3fe7eb6be4d29be68b1ae ;;
+      aarch64|arm64) zoxide_arch=aarch64; zoxide_digest=f1f16c5d6298d63dee467eedea1cdcd8490e43e493bea43acd416dc9033ef641 ;;
+      *) die 'Upstream zoxide binaries support x86_64 and arm64 in this installer.' ;;
+    esac
+    log 'Installing zoxide v0.10.0 (verified SHA-256)'
+    curl -fL --retry 3 "https://github.com/ajeetdsouza/zoxide/releases/download/v0.10.0/zoxide-0.10.0-$zoxide_arch-unknown-linux-musl.tar.gz" -o "$work/zoxide.tar.gz"
+    printf '%s  %s\n' "$zoxide_digest" "$work/zoxide.tar.gz" | sha256sum -c -
+    mkdir "$work/zoxide"
+    tar -xzf "$work/zoxide.tar.gz" -C "$work/zoxide"
+    "$work/zoxide/zoxide" --version >/dev/null
+    backup "$HOME/.local/bin/zoxide"
+    cp "$work/zoxide/zoxide" "$HOME/.local/bin/zoxide"
+    chmod +x "$HOME/.local/bin/zoxide"
+  fi
   if [ "$manager" != apk ]; then
     case "$(uname -m)" in
       x86_64) arch=x86_64; digest=474430d53e6264f6d6dd18db42d6dc9df3a1b56ca9e88a325bbf860e1a811d87 ;;
       aarch64|arm64) arch=arm64; digest=8f1f64a0bdb97247034038c3823c6cbad5bdf9ecd5751b85494b71c3ee04c815 ;;
       *) die 'Neovim binaries support x86_64 and arm64 only.' ;;
     esac
-    log 'Installing Neovim v0.12.6 (verified SHA-256)'
-    curl -fL --retry 3 "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-linux-$arch.tar.gz" -o "$work/nvim.tar.gz"
-    printf '%s  %s\n' "$digest" "$work/nvim.tar.gz" | sha256sum -c -
-    tar -xzf "$work/nvim.tar.gz" -C "$work"
-    # Check binary compatibility before replacing any configuration.
-    "$work/nvim-linux-$arch/bin/nvim" --version >/dev/null || die 'Neovim binary cannot run on this VM; a newer glibc may be required.'
     runtime=$data_home/vm-setup/nvim-v0.12.6-$arch
     mkdir -p "$(dirname "$runtime")"
-    if [ ! -d "$runtime" ]; then mv "$work/nvim-linux-$arch" "$runtime"; fi
+    if [ ! -f "$runtime/share/nvim/runtime/filetype.lua" ] || ! "$runtime/bin/nvim" --version >/dev/null 2>&1; then
+      log 'Installing Neovim v0.12.6 (verified SHA-256)'
+      curl -fL --retry 3 "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-linux-$arch.tar.gz" -o "$work/nvim.tar.gz"
+      printf '%s  %s\n' "$digest" "$work/nvim.tar.gz" | sha256sum -c -
+      tar -xzf "$work/nvim.tar.gz" -C "$work"
+      # Ubuntu 20.04's glibc cannot run the official binaries. Build the same
+      # pinned release locally, before replacing the user's editor configuration.
+      if "$work/nvim-linux-$arch/bin/nvim" --version >/dev/null 2>&1; then
+        backup "$runtime"
+        mv "$work/nvim-linux-$arch" "$runtime"
+      elif [ "$manager" = apt ]; then
+        log 'Neovim binary is incompatible with this glibc; building v0.12.6 from source (this takes several minutes).'
+        $privilege env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y cmake ninja-build gettext pkg-config
+        git clone --depth 1 --branch v0.12.6 https://github.com/neovim/neovim.git "$work/neovim-source"
+        [ "$(git -C "$work/neovim-source" rev-parse HEAD)" = 779c36969e31080503be2dfccbcc3f999e289606 ] || die 'Unexpected Neovim source revision.'
+        backup "$runtime"
+        (cd "$work/neovim-source" && CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-2}" make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX="$runtime" install)
+        "$runtime/bin/nvim" --version >/dev/null
+      else
+        die 'Neovim binary cannot run on this VM; a newer glibc may be required.'
+      fi
+    fi
     backup "$HOME/.local/bin/nvim"
     ln -s "$runtime/bin/nvim" "$HOME/.local/bin/nvim"
   fi
