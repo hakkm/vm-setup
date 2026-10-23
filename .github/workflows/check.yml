@@ -1,0 +1,22 @@
+name: Check VM setup
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  public-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check-public.py
+      - run: shellcheck install.sh tests/smoke.sh
+      - run: docker run --rm -v "$PWD:/repo:ro" zricethezav/gitleaks:latest dir /repo --no-banner --redact
+  install:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ['ubuntu:24.04', 'debian:trixie', 'fedora:44', 'archlinux:latest', 'opensuse/tumbleweed:latest', 'alpine:latest']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install, check editor and shell, rerun and verify backups
+        run: docker run --rm -v "$PWD:/setup:ro" '${{ matrix.image }}' sh /setup/tests/smoke.sh

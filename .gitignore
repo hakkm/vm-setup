@@ -1,0 +1,11 @@
+**/secret.zsh
+**/secrets.zsh
+**/*secret*.zsh
+**/.env*
+**/*history*
+**/.zcompdump*
+**/db_ui/
+**/*.swp
+**/*.swo
+**/__pycache__/
+.test-output/

@@ -1,0 +1,624 @@
+## sorting ------------------------------
+
+snippet merge_sort
+	void merge(int *arr, int l, int m, int r) {
+		int n1 = m - l + 1;
+		int n2 = r - m;
+
+		int L[n1], R[n2];
+		for (int i = 0; i < n1; i++) {
+			L[i] = arr[l + i];
+		}
+		for (int i = 0; i < n2; i++) {
+			R[i] = arr[m + 1 + i];
+		}
+
+		int i = 0, j = 0, k = l;
+		while (i < n1 && j < n2) {
+			if (L[i] <= R[j]) {
+				arr[k] = L[i];
+				i++;
+			} else {
+				arr[k] = R[j];
+				j++;
+			}
+			k++;
+		}
+
+		while (i < n1) {
+			arr[k] = L[i];
+			i++;
+			k++;
+		}
+
+		while (j < n2) {
+			arr[k] = R[j];
+			j++;
+			k++;
+		}
+	}
+	void merge_sort(int *arr, int l, int r) {
+		if (l < r) {
+			int m = l + (r - l) / 2;
+			merge_sort(arr, l, m);
+			merge_sort(arr, m + 1, r);
+			merge(arr, l, m, r);
+		}
+	}
+
+# snippet quick_sort
+snippet quick_sort 
+	
+	void quick_sort(int *arr, int l, int r) {
+		if (l < r) {
+			int pi = partition(arr, l, r);
+			quick_sort(arr, l, pi - 1);
+			quick_sort(arr, pi + 1, r);
+		}
+	}
+
+	int partition(int *arr, int l, int r) {
+		int pivot = arr[r];
+		int i = l - 1;
+		for (int j = l; j < r; j++) {
+			if (arr[j] < pivot) {
+				i++;
+				swap(arr[i], arr[j]);
+			}
+		}
+		swap(arr[i + 1], arr[r]);
+		return i + 1;
+	}
+
+snippet print_array 
+	void print_array(int *arr, int n) {
+		for (int i = 0; i < n; i++) {
+			printf("%d ", arr[i]);
+		}
+		printf("\n");
+	}
+
+# snippet swap
+snippet swap_int
+	void swap(int &a, int &b) {
+		int temp = a;
+		a = b;
+		b = temp;
+	}
+
+## Arrays ------------------------------
+# find maximum element
+snippet find_max
+	int find_max(int *arr, int n) {
+		int max = INT_MIN;
+		for (int i = 0; i < n; i++) {
+			max = max(max, arr[i]);
+		}
+		return max;
+	}
+
+# find minimum element
+snippet find_min
+	int find_min(int *arr, int n) {
+		int min = INT_MAX;
+		for (int i = 0; i < n; i++) {
+			min = min(min, arr[i]);
+		}
+		return min;
+	}
+
+# find sum of elements
+snippet find_sum
+	int find_sum(int *arr, int n) {
+		int sum = 0;
+		for (int i = 0; i < n; i++) {
+			sum += arr[i];
+		}
+		return sum;
+	}
+
+# find average of elements
+snippet find_average
+	double find_average(int *arr, int n) {
+		return (double)find_sum(arr, n) / n;
+	}
+
+
+# reverse an array
+snippet reverse_array
+	void reverse_array(int *arr, int n) {
+		for (int i = 0; i < n / 2; i++) {
+			swap(arr[i], arr[n - i - 1]);
+		}
+	}
+
+## Strings ------------------------------
+# reverse a string
+snippet reverse_string
+	void reverse_string(char *str) {
+		int n = strlen(str);
+		for (int i = 0; i < n / 2; i++) {
+			swap(str[i], str[n - i - 1]);
+		}
+	}
+
+# is string palindrome
+snippet is_palindrome
+	bool is_palindrome(char *str) {
+		int n = strlen(str);
+		for (int i = 0; i < n / 2; i++) {
+			if (str[i] != str[n - i - 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+# find_substring(str, sub)
+snippet find_substring
+	int find_substring(char *str, char *sub) {
+		int n = strlen(str);
+		int m = strlen(sub);
+		for (int i = 0; i <= n - m; i++) {
+			int j;
+			for (j = 0; j < m; j++) {
+				if (str[i + j] != sub[j]) {
+					break;
+				}
+			}
+			if (j == m) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+# count_occurrences(str, ch)
+snippet count_occurrences
+	int count_occurrences(char *str, char ch) {
+		int n = strlen(str);
+		int count = 0;
+		for (int i = 0; i < n; i++) {
+			if (str[i] == ch) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+# remove_char(str, ch)
+snippet remove_char
+	void remove_char(char *str, char ch) {
+		int n = strlen(str);
+		int j = 0;
+		for (int i = 0; i < n; i++) {
+			if (str[i] != ch) {
+				str[j++] = str[i];
+			}
+		}
+		str[j] = '\0';
+	}
+
+# remove_duplicates(str)
+snippet remove_duplicates
+	void remove_duplicates(char *str) {
+		int n = strlen(str);
+		int j = 0;
+		for (int i = 0; i < n; i++) {
+			int k;
+			for (k = 0; k < j; k++) {
+				if (str[i] == str[k]) {
+					break;
+				}
+			}
+			if (k == j) {
+				str[j++] = str[i];
+			}
+		}
+		str[j] = '\0';
+	}
+
+# count_words(str)
+snippet count_words
+	int count_words(char *str) {
+		int n = strlen(str);
+		int count = 0;
+		bool in_word = false;
+		for (int i = 0; i < n; i++) {
+			if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n') {
+				in_word = false;
+			} else if (!in_word) {
+				in_word = true;
+				count++;
+			}
+		}
+		return count;
+	}
+
+# reverse_words(str)
+snippet reverse_words
+	void reverse_words(char *str) {
+		int n = strlen(str);
+		reverse_string(str);
+		int start = 0;
+		for (int i = 0; i <= n; i++) {
+			if (str[i] == ' ' || str[i] == '\0') {
+				reverse_string(str + start);
+				start = i + 1;
+			}
+		}
+	}
+
+# is_anagram(str1, str2)
+snippet is_anagram
+	bool is_anagram(char *str1, char *str2) {
+		int count[256] = {0};
+		int n1 = strlen(str1);
+		int n2 = strlen(str2);
+		if (n1 != n2) {
+			return false;
+		}
+		for (int i = 0; i < n1; i++) {
+			count[str1[i]]++;
+			count[str2[i]]--;
+		}
+		for (int i = 0; i < 256; i++) {
+			if (count[i] != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+# is_rotation(str1, str2)
+snippet is_rotation
+	bool is_rotation(char *str1, char *str2) {
+		int n1 = strlen(str1);
+		int n2 = strlen(str2);
+		if (n1 != n2) {
+			return false;
+		}
+		char *temp = (char *)malloc(2 * n1 + 1);
+		strcpy(temp, str1);
+		strcat(temp, str1);
+		bool is_rotation = find_substring(temp, str2) != -1;
+		free(temp);
+		return is_rotation;
+	}
+
+# is_subsequence(str1, str2)
+snippet is_subsequence
+	bool is_subsequence(char *str1, char *str2) {
+		int n1 = strlen(str1);
+		int n2 = strlen(str2);
+		int j = 0;
+		for (int i = 0; i < n1 && j < n2; i++) {
+			if (str1[i] == str2[j]) {
+				j++;
+			}
+		}
+		return j == n2;
+	}
+
+## Math ------------------------------
+# is_prime(n)
+snippet is_prime
+	bool is_prime(int n) {
+		if (n < 2) {
+			return false;
+		}
+		for (int i = 2; i * i <= n; i++) {
+			if (n % i == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+# is_palindrome(n)
+snippet is_palindrome
+	bool is_palindrome(int n) {
+		if (n < 0) {
+			return false;
+		}
+		int temp = n;
+		int reverse = 0;
+		while (temp) {
+			reverse = reverse * 10 + temp % 10;
+			temp /= 10;
+		}
+		return n == reverse;
+	}
+
+# lcm(a, b)
+snippet lcm
+	int lcm(int a, int b) {
+		return a / gcd(a, b) * b;
+	}
+
+# gcd(a, b)
+snippet gcd
+	int gcd(int a, int b) {
+		return b == 0 ? a : gcd(b, a % b);
+	}
+
+# factorial(n)
+snippet factorial
+	int factorial(int n) {
+		return n == 0 ? 1 : n * factorial(n - 1);
+	}
+
+# fibonacci(n)
+snippet fibonacci
+	int fibonacci(int n) {
+		if (n <= 1) {
+			return n;
+		}
+		int a = 0, b = 1;
+		for (int i = 2; i <= n; i++) {
+			int c = a + b;
+			a = b;
+			b = c;
+		}
+		return b;
+	}
+
+# min(a, b)
+snippet min
+	int min(int a, int b) {
+		return a < b ? a : b;
+	}
+
+# max(a, b)
+snippet max
+	int max(int a, int b) {
+		return a > b ? a : b;
+	}
+
+# abs(a)
+snippet abs
+	int abs(int a) {
+		return a < 0 ? -a : a;
+	}
+
+# linked list ------------------------------
+# struct node
+snippet struct_node
+	struct Node {
+		int data;
+		Node *next;
+	};
+
+# create_node(data)
+snippet create_node
+	Node *create_node(int data) {
+		Node *node = new Node();
+		node->data = data;
+		node->next = NULL;
+		return node;
+	}
+
+# insert_at_head(head, data)
+snippet insert_at_head
+	void insert_at_head(Node *&head, int data) {
+		Node *node = create_node(data);
+		node->next = head;
+		head = node;
+	}
+
+# insert_at_tail(head, data)
+snippet insert_at_tail
+	void insert_at_tail(Node *&head, int data) {
+		Node *node = create_node(data);
+		if (head == NULL) {
+			head = node;
+		} else {
+			Node *temp = head;
+			while (temp->next != NULL) {
+				temp = temp->next;
+			}
+			temp->next = node;
+		}
+	}
+
+# delete_at_head(head)
+snippet delete_at_head
+	void delete_at_head(Node *&head) {
+		if (head != NULL) {
+			Node *temp = head;
+			head = head->next;
+			delete temp;
+		}
+	}
+
+# delete_at_tail(head)
+snippet delete_at_tail
+	void delete_at_tail(Node *&head) {
+		if (head != NULL) {
+			if (head->next == NULL) {
+				delete head;
+				head = NULL;
+			} else {
+				Node *temp = head;
+				while (temp->next->next != NULL) {
+					temp = temp->next;
+				}
+				delete temp->next;
+				temp->next = NULL;
+			}
+		}
+	}
+
+# print_list(head)
+snippet print_list
+	void print_list(Node *head) {
+		Node *temp = head;
+		while (temp != NULL) {
+			printf("%d ", temp->data);
+			temp = temp->next;
+		}
+		printf("\n");
+	}
+
+# reverse_list(head)
+snippet reverse_list
+	void reverse_list(Node *&head) {
+		Node *prev = NULL;
+		Node *curr = head;
+		while (curr != NULL) {
+			Node *next = curr->next;
+			curr->next = prev;
+			prev = curr;
+			curr = next;
+		}
+		head = prev;
+	}
+
+# stack ------------------------------
+# struct stack
+snippet struct_stack
+	struct Stack {
+		int *arr;
+		int capacity;
+		int top;
+	};
+
+# stack_size(stack)
+snippet stack_size
+	int stack_size(Stack *stack) {
+		return stack->top + 1;
+	}
+
+# create_stack(capacity)
+snippet create_stack
+	Stack *create_stack(int capacity) {
+		Stack *stack = new Stack();
+		stack->arr = new int[capacity];
+		stack->capacity = capacity;
+		stack->top = -1;
+		return stack;
+	}
+
+# is_full(stack)
+snippet stack_is_full
+	bool is_full(Stack *stack) {
+		return stack->top == stack->capacity - 1;
+	}
+
+# is_empty(stack)
+snippet stack_is_empty
+	bool is_empty(Stack *stack) {
+		return stack->top == -1;
+	}
+
+# stack_push(stack, data)
+snippet stack_push
+	void stack_push(Stack *stack, int data) {
+		if (!is_full(stack)) {
+			stack->arr[++stack->top] = data;
+		}
+	}
+
+# stack_pop(stack)
+snippet stack_pop
+	void stack_pop(Stack *stack) {
+		if (!is_empty(stack)) {
+			stack->top--;
+		}
+	}
+
+# stack_top(stack)
+snippet stack_top
+	int stack_top(Stack *stack) {
+		return is_empty(stack) ? -1 : stack->arr[stack->top];
+	}
+
+# stack_print(stack)
+snippet stack_print
+	void stack_print(Stack *stack) {
+		for (int i = 0; i <= stack->top; i++) {
+			printf("%d ", stack->arr[i]);
+		}
+		printf("\n");
+	}
+
+
+
+# queue ------------------------------
+# struct queue
+snippet struct_queue
+	struct Queue {
+		int *arr;
+		int capacity;
+		int front;
+		int rear;
+	};
+
+# queue_create(capacity)
+snippet queue_create
+	Queue *queue_create(int capacity) {
+		Queue *queue = new Queue();
+		queue->arr = new int[capacity];
+		queue->capacity = capacity;
+		queue->front = 0;
+		queue->rear = 0;
+		return queue;
+	}
+
+# queue_is_full(queue)
+snippet queue_is_full
+	bool queue_is_full(Queue *queue) {
+		return (queue->rear + 1) % queue->capacity == queue->front;
+	}
+
+# queue_is_empty(queue)
+snippet queue_is_empty
+	bool queue_is_empty(Queue *queue) {
+		return queue->front == queue->rear;
+	}
+
+# queue_push(queue, data)
+snippet queue_push
+	void queue_push(Queue *queue, int data) {
+		if (!queue_is_full(queue)) {
+			queue->arr[queue->rear] = data;
+			queue->rear = (queue->rear + 1) % queue->capacity;
+		}
+	}
+
+# queue_pop(queue)
+snippet queue_pop
+	void queue_pop(Queue *queue) {
+		if (!queue_is_empty(queue)) {
+			queue->front = (queue->front + 1) % queue->capacity;
+		}
+	}
+
+# queue_front(queue)
+snippet queue_front
+	int queue_front(Queue *queue) {
+		return queue_is_empty(queue) ? -1 : queue->arr[queue->front];
+	}
+
+# queue_back(queue)
+snippet queue_back
+	int queue_back(Queue *queue) {
+		return queue_is_empty(queue) ? -1 : queue->arr[(queue->rear - 1 + queue->capacity) % queue->capacity];
+	}
+
+# queue_size(queue)
+snippet queue_size
+	int queue_size(Queue *queue) {
+		return (queue->capacity - queue->front + queue->rear) % queue->capacity;
+	}
+
+# queue_print(queue)
+snippet queue_print
+	void queue_print(Queue *queue) {
+		for (int i = queue->front; i != queue->rear; i = (i + 1) % queue->capacity) {
+			printf("%d ", queue->arr[i]);
+		}
+		printf("\n");
+	}
+
+

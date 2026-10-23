@@ -1,0 +1,19 @@
+{
+	"name": "my-snippets",
+	"contributes": {
+		"snippets": [
+			{
+				"language": [
+					"twig"
+				],
+				"path": "./twig.json"
+			},
+			{
+				"language": [
+					"php"
+				],
+				"path": "./php.json"
+			}
+		]
+	}
+}

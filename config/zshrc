@@ -1,0 +1,13 @@
+# VM profile: deliberately source only these files, never a directory glob.
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/exports.zsh"
+source "${XDG_DATA_HOME:-$HOME/.local/share}/zap/zap.zsh"
+plug "zsh-users/zsh-completions"
+plug "zap-zsh/supercharge"
+plug "zap-zsh/zap-prompt"
+plug "zsh-users/zsh-autosuggestions"
+for _vm_file in completion commands vim-mode aliases keymaps timer; do
+  source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/${_vm_file}.zsh"
+done
+unset _vm_file
+# Syntax highlighting should load after widgets and keybindings.
+plug "zsh-users/zsh-syntax-highlighting"
