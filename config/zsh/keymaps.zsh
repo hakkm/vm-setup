@@ -11,7 +11,7 @@ bindkey -s '^r' 'fh\n'
 # Run outside the command buffer so unfinished input survives closing ranger.
 _vm_ranger() {
   zle -I
-  command ranger
+  command ranger </dev/tty
   zle reset-prompt
 }
 zle -N _vm_ranger
