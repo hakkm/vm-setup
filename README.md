@@ -16,7 +16,7 @@ Install `curl` first if your minimal image does not include it.
 - Zsh with Zap, supercharge, zap-prompt, autosuggestions, syntax highlighting,
   and completions. The prompt starts with `user@host` so each VM is recognizable.
 - Your Vi mode (`kj` to leave insert mode), cursor shapes, timer, history search,
-  Ctrl-E command editing, Ctrl-R fuzzy history, and Ctrl-V editor shortcut.
+  Ctrl-E command editing, Ctrl-R fuzzy history, Ctrl-O ranger, and Ctrl-V editor shortcut.
 - Portable aliases, `mkcd`, `fcd`, `cdf`, `cdpr`, `sf`, and zoxide navigation.
   Package aliases follow the VM's package manager.
 - Neovim **v0.12.6** with a lean editing config: Copilot, autopairs, surround,

@@ -35,6 +35,8 @@ backup=$(find "$HOME/.local/state" -path '*/zsh/secrets.zsh' | head -1)
 test -n "$backup"
 test "$(cat "$backup")" = 'preserve me'
 zsh -ic '[[ $EDITOR == $VM_EXPECTED_EDITOR && $VISUAL == $VM_EXPECTED_EDITOR ]] || exit 1; (( $+functions[mkcd] && $+functions[fh] )) || exit 1; [[ $(bindkey -M viins kj) == *vi-cmd-mode* ]]'
+# Ctrl-O must open ranger in every supported command-line keymap.
+zsh -ic 'for map in viins vicmd emacs; do [[ $(bindkey -M "$map" "^o") == *_vm_ranger ]] || exit 1; done; [[ $widgets[_vm_ranger] == user:_vm_ranger ]]'
 # A rerun must preserve the previous config and any VM-local private file too.
 printf 'local only\n' > "$HOME/.config/zsh/secret.zsh"
 sh "$source_dir/install.sh" --local "$source_dir" --no-sync
